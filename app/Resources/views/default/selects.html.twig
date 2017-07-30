@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.producer) }}
+    {{ form_row(form.model) }}
+    {{ form_end(form) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        var $producer = $('#car_producer');
+        $producer.change(function () {
+            var $form = $(this).closest('form');
+            var data = {};
+            data[$producer.attr('name')] = $producer.val();
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: data,
+                success: function (html) {
+
+                    $('#car_model').replaceWith(
+                            $(html).find('#car_model')
+                            );
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
